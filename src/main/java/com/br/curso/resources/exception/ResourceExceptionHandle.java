@@ -21,7 +21,7 @@ public class ResourceExceptionHandle {
 		StandardError error = new StandardError();
 		error.setTimeStamp(Instant.now());
 		error.setStatus(HttpStatus.NOT_FOUND.value());
-		error.setMsg(e.getMessage());
+		error.setMensagem(e.getMessage());
 		error.setPath(request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);		
