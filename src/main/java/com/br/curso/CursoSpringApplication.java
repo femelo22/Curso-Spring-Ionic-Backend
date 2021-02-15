@@ -25,6 +25,8 @@ import com.br.curso.repositories.CidadeRepository;
 import com.br.curso.repositories.ClienteRepository;
 import com.br.curso.repositories.EnderecoRepository;
 import com.br.curso.repositories.EstadoRepository;
+import com.br.curso.repositories.PagamentoRepository;
+import com.br.curso.repositories.PedidoRepository;
 import com.br.curso.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -51,6 +53,12 @@ public class CursoSpringApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	
 	
@@ -111,6 +119,12 @@ public class CursoSpringApplication implements CommandLineRunner{
 		ped1.setPagamento(pagto1);
 		
 		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/03/2021 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
 	}
 
