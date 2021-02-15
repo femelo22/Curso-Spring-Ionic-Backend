@@ -1,5 +1,6 @@
 package com.br.curso;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,12 @@ import com.br.curso.domain.Cidade;
 import com.br.curso.domain.Cliente;
 import com.br.curso.domain.Endereco;
 import com.br.curso.domain.Estado;
+import com.br.curso.domain.Pagamento;
+import com.br.curso.domain.PagamentoComBoleto;
+import com.br.curso.domain.PagamentoComCartao;
+import com.br.curso.domain.Pedido;
 import com.br.curso.domain.Produto;
+import com.br.curso.domain.enums.EstadoPagamento;
 import com.br.curso.domain.enums.TipoCliente;
 import com.br.curso.repositories.CategoriaRepository;
 import com.br.curso.repositories.CidadeRepository;
@@ -95,6 +101,16 @@ public class CursoSpringApplication implements CommandLineRunner{
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1,e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy HH:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("15/02/2021 14:55"),cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("15/02/2021 16:30"),cli1, e2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/03/2021 00:00"), null);
 		
 	}
 
