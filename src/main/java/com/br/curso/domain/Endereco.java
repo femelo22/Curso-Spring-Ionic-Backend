@@ -1,6 +1,7 @@
 package com.br.curso.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Endereco implements Serializable{
@@ -24,7 +25,7 @@ public class Endereco implements Serializable{
 	private String bairro;
 	private String cep;
 	
-	@JsonBackReference //diz que o endereço não pode serializar o cliente
+	@JsonIgnore //diz que o endereço não pode serializar o cliente
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
