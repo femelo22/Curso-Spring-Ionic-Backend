@@ -15,7 +15,7 @@ public class CategoriaService {
 	CategoriaRepository categoriaRepository;
 	
 	@Transactional(readOnly = true)
-	public Categoria buscarPorId(Integer id){
+	public Categoria findById(Integer id){
 		
 		Categoria categoria = this.categoriaRepository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada"));
@@ -28,6 +28,9 @@ public class CategoriaService {
 		return categoriaRepository.save(obj);
 	}
 	
-	
+	public Categoria update(Categoria obj) {
+		findById(obj.getId());
+		return categoriaRepository.save(obj);
+	}
 
 }
