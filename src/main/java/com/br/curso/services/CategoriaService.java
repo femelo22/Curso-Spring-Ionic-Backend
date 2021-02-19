@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.curso.domain.Categoria;
+import com.br.curso.dto.CategoriaDTO;
 import com.br.curso.repositories.CategoriaRepository;
 import com.br.curso.services.exception.DataIntegrityException;
 import com.br.curso.services.exception.ObjectNotFoundException;
@@ -56,6 +57,10 @@ public class CategoriaService {
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage,String direction, String orderBy){
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return categoriaRepository.findAll(pageRequest);
+	}
+	
+	public Categoria fromDto(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getNome());
 	}
 
 }
