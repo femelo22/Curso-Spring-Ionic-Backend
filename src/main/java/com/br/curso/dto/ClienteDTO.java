@@ -6,7 +6,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.br.curso.domain.Cliente;
+import com.br.curso.services.validation.ClienteUpdate;
 
+@ClienteUpdate
 public class ClienteDTO {
 
 	private Integer id;
