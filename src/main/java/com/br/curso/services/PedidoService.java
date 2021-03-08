@@ -21,6 +21,5 @@ public class PedidoService {
 				.orElseThrow(() -> new ObjectNotFoundException("Pedido não encontrado"));
 		
 		return pedido;
-		
 	}
 }
