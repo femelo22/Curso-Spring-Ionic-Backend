@@ -1,8 +1,11 @@
 package com.br.curso.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -91,8 +94,8 @@ public class Pedido implements Serializable{
 		return cliente;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setCliente(Cliente optional) {
+		this.cliente = optional;
 	}
 
 	public Endereco getEnderecoDeEntrega() {
@@ -138,6 +141,8 @@ public class Pedido implements Serializable{
 
 	@Override
 	public String toString() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
+		
 		StringBuilder builder = new StringBuilder();
 		builder.append("Pedido número: ");
 		builder.append(getId());
@@ -152,7 +157,7 @@ public class Pedido implements Serializable{
 			builder.append(ip.toString());
 		}
 		builder.append("Valor total: ");
-		builder.append(getValorTotal());
+		builder.append(nf.format(getValorTotal()));
 		
 		return builder.toString();
 	}
