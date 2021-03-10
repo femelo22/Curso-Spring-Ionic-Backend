@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -17,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.br.curso.domain.enums.Perfil;
 import com.br.curso.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -63,9 +65,13 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCod();
 		this.senha = senha;
+		addPerfil(Perfil.CLIENTE);
 	}
 	
-	public Cliente() {}
+	//Todos clientes, por padrão terão o perfil cliente
+	public Cliente() {
+		addPerfil(Perfil.CLIENTE);
+	}
 
 	public Integer getId() {
 		return id;
@@ -117,6 +123,15 @@ public class Cliente implements Serializable{
 
 	public Set<String> getTelefones() {
 		return telefones;
+	}
+	
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil.getCod());
+	}
+	
+	//converter o numero inteiro para o perfil
+	public Set<Perfil> getPerfis(){
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());//lambda 
 	}
 
 	public void setTelefones(Set<String> telefones) {
