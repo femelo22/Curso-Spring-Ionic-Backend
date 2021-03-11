@@ -1,9 +1,14 @@
 package com.br.curso.security;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.br.curso.domain.enums.Perfil;
 
 public class UserSS implements UserDetails{ // permite a busca pelo nome do usuario
 	
@@ -14,7 +19,18 @@ public class UserSS implements UserDetails{ // permite a busca pelo nome do usua
 	private String senha;
 	private Collection<? extends GrantedAuthority> authorities;
 
+	public UserSS() {
+		
+	}
 	
+	public UserSS(Integer id, String email, String senha, Set<Perfil> perfis) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.senha = senha;
+		this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
+	}
+
 	public Integer getId() {
 		return id;
 	}
