@@ -69,5 +69,10 @@ public class UserSS implements UserDetails{ // permite a busca pelo nome do usua
 	public boolean isEnabled() {
 		return true;
 	}
+	
+	//testa se o usuario possui um dado perfil
+	public boolean hasRole(Perfil perfil) {
+		return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao()));
+	}
 
 }

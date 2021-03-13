@@ -10,7 +10,9 @@ public class UserService {
 	public static UserSS authenticated() {
 		try {
 			
-			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //pega usuário logado
+			String email = SecurityContextHolder.getContext().getAuthentication().getName();
+			
+			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();//pega usuário logado
 			
 		} catch (Exception e) {
 			// se n achar retorna nulo

@@ -23,10 +23,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.br.curso.domain.Categoria;
 import com.br.curso.domain.Cliente;
+import com.br.curso.domain.enums.Perfil;
 import com.br.curso.dto.CategoriaDTO;
 import com.br.curso.dto.ClienteDTO;
 import com.br.curso.dto.ClienteNewDTO;
+import com.br.curso.security.UserSS;
 import com.br.curso.services.ClienteService;
+import com.br.curso.services.UserService;
+import com.br.curso.services.exception.AuthorizationExcption;
 
 @RestController
 @RequestMapping(value = "/clientes")
@@ -37,6 +41,12 @@ public class ClienteResource {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Cliente> find(@PathVariable Integer id){
+		
+		UserSS user = UserService.authenticated();
+		
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationExcption("Acesso negado.");
+		}
 		
 		Cliente cliente = clienteService.findById(id);
 		
