@@ -30,7 +30,7 @@ import com.br.curso.dto.ClienteNewDTO;
 import com.br.curso.security.UserSS;
 import com.br.curso.services.ClienteService;
 import com.br.curso.services.UserService;
-import com.br.curso.services.exception.AuthorizationExcption;
+import com.br.curso.services.exception.AuthorizationException;
 
 @RestController
 @RequestMapping(value = "/clientes")
@@ -45,7 +45,7 @@ public class ClienteResource {
 		UserSS user = UserService.authenticated();
 		
 		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
-			throw new AuthorizationExcption("Acesso negado.");
+			throw new AuthorizationException("Acesso negado.");
 		}
 		
 		Cliente cliente = clienteService.findById(id);

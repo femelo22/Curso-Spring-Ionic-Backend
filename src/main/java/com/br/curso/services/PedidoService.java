@@ -3,6 +3,9 @@ package com.br.curso.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +18,8 @@ import com.br.curso.repositories.ClienteRepository;
 import com.br.curso.repositories.ItemPedidoRepository;
 import com.br.curso.repositories.PagamentoRepository;
 import com.br.curso.repositories.PedidoRepository;
-import com.br.curso.repositories.ProdutoRepository;
+import com.br.curso.security.UserSS;
+import com.br.curso.services.exception.AuthorizationException;
 import com.br.curso.services.exception.ObjectNotFoundException;
 
 @Service
@@ -42,6 +46,8 @@ public class PedidoService {
 	@Autowired
 	private EmailService emailServer;
 	
+	@Autowired
+	private ClienteService clienteService;
 	
 	
 	public Pedido findById(Integer id) {
@@ -79,6 +85,17 @@ public class PedidoService {
 		emailServer.sendOrderConfirmationHtmlEmail(obj);
 		
 		return obj;
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente =  clienteService.findById(user.getId());
+		
+		return pedidoRepository.findByCliente(cliente, pageRequest);
 	}
 	
 	
