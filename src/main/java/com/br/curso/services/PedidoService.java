@@ -94,7 +94,6 @@ public class PedidoService {
 		}
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Cliente cliente =  clienteService.findById(user.getId());
-		
 		return pedidoRepository.findByCliente(cliente, pageRequest);
 	}
 	

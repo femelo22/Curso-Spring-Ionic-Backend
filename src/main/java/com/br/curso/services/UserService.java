@@ -15,7 +15,6 @@ public class UserService {
 			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();//pega usuário logado
 			
 		} catch (Exception e) {
-			// se n achar retorna nulo
 			return null;
 		}
 	}
