@@ -1,8 +1,12 @@
 package com.br.curso.config;
 
+<<<<<<< HEAD
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+=======
+import org.springframework.beans.factory.annotation.Value;
+>>>>>>> 59efc0a5800f103439a580e5674b060f369e798e
 import org.springframework.context.annotation.Configuration;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -16,6 +20,7 @@ public class S3Config {
 	
 	@Value("${aws.access_key_id}")
 	private String awsId;
+<<<<<<< HEAD
 
 	@Value("${aws.secret_access_key}")
 	private String awsKey;
@@ -30,4 +35,23 @@ public class S3Config {
 							.withCredentials(new AWSStaticCredentialsProvider(awsCred)).build();
 		return s3client;
 	}
+=======
+	
+	@Value("${aws.secret_access_key}")
+	private String awsKey;
+	
+	@Value("${s3.region}")
+	private String region; 
+	
+	public AmazonS3 s3client() {
+		BasicAWSCredentials awsCred = new BasicAWSCredentials(awsId, awsKey);
+		AmazonS3 s3cliente = AmazonS3ClientBuilder.standard().withRegion(Regions.fromName(region))
+				.withCredentials(new AWSStaticCredentialsProvider(awsCred)).build();
+		return s3cliente;
+	}
+	
+	
+	
+
+>>>>>>> 59efc0a5800f103439a580e5674b060f369e798e
 }
