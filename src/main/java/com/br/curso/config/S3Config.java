@@ -1,9 +1,13 @@
 package com.br.curso.config;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+=======
+import org.springframework.beans.factory.annotation.Value;
+>>>>>>> 59efc0a5800f103439a580e5674b060f369e798e
 =======
 import org.springframework.beans.factory.annotation.Value;
 >>>>>>> 59efc0a5800f103439a580e5674b060f369e798e
@@ -21,6 +25,7 @@ public class S3Config {
 	@Value("${aws.access_key_id}")
 	private String awsId;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	@Value("${aws.secret_access_key}")
 	private String awsKey;
@@ -36,6 +41,8 @@ public class S3Config {
 		return s3client;
 	}
 =======
+=======
+>>>>>>> 59efc0a5800f103439a580e5674b060f369e798e
 	
 	@Value("${aws.secret_access_key}")
 	private String awsKey;
@@ -53,5 +60,8 @@ public class S3Config {
 	
 	
 
+<<<<<<< HEAD
+>>>>>>> 59efc0a5800f103439a580e5674b060f369e798e
+=======
 >>>>>>> 59efc0a5800f103439a580e5674b060f369e798e
 }
