@@ -6,11 +6,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.curso.domain.Cidade;
 import com.br.curso.domain.Estado;
+import com.br.curso.dto.CidadeDTO;
 import com.br.curso.dto.EstadoDTO;
+import com.br.curso.services.CidadeService;
 import com.br.curso.services.EstadoService;
 
 @RestController
@@ -20,6 +24,9 @@ public class EstadoResource {
 	@Autowired
 	private EstadoService service;
 	
+	@Autowired
+	private CidadeService cidadeService;
+	
 	@GetMapping
 	public ResponseEntity<List<EstadoDTO>> findAll(){
 		List<Estado> list = service.findAll();
@@ -28,4 +35,16 @@ public class EstadoResource {
 		
 		return ResponseEntity.ok().body(listDto);
 	}
+	
+	
+	@GetMapping(value = "/{estadoId}/cidades")
+	public ResponseEntity<List<CidadeDTO>> findCidades(@PathVariable Integer estadoId){
+		List<Cidade> list = cidadeService.findByEstado(estadoId);
+		
+		List<CidadeDTO> listDto = list.stream().map(obj -> new CidadeDTO(obj)).collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(listDto);
+	}
+	
+	
 }
