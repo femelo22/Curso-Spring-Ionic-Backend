@@ -1,6 +1,5 @@
 package com.br.curso.resources.exception;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,12 +9,10 @@ public class ValidationError extends StandardError{
 	
 	private List<FieldMessage> errors = new ArrayList<>();
 	
-	public ValidationError() {
-		super();
-	}
+	public ValidationError() {}
 	
-	public ValidationError(Integer status, String mensagem, Instant timeStamp, String path) {
-		super(status, mensagem, timeStamp, path);
+	public ValidationError(Long timestamp, Integer status, String error, String message, String path) {
+		super(timestamp, status, error, message, path);
 	}
 
 	public List<FieldMessage> getErrors() {

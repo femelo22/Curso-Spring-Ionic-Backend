@@ -24,9 +24,10 @@ public class ResourceExceptionHandle {
 	public ResponseEntity<StandardError> elementNotFound(ObjectNotFoundException e, HttpServletRequest request){
 		
 		StandardError error = new StandardError();
-		error.setTimeStamp(Instant.now());
+		error.setTimestamp(System.currentTimeMillis());
 		error.setStatus(HttpStatus.NOT_FOUND.value());
-		error.setMensagem(e.getMessage());
+		error.setError("Não encontrado");
+		error.setMessage(e.getMessage());
 		error.setPath(request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);		
@@ -36,9 +37,10 @@ public class ResourceExceptionHandle {
 	public ResponseEntity<StandardError> integrityViolation(DataIntegrityException e, HttpServletRequest request){
 		
 		StandardError error = new StandardError();
-		error.setTimeStamp(Instant.now());
+		error.setTimestamp(System.currentTimeMillis());
 		error.setStatus(HttpStatus.BAD_REQUEST.value());
-		error.setMensagem(e.getMessage());
+		error.setError("Integridade de dados");
+		error.setMessage(e.getMessage());
 		error.setPath(request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);		
@@ -48,25 +50,27 @@ public class ResourceExceptionHandle {
 	public ResponseEntity<StandardError> argumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request){
 		
 		ValidationError error = new ValidationError();
-		error.setTimeStamp(Instant.now());
-		error.setStatus(HttpStatus.BAD_REQUEST.value());
-		error.setMensagem("Erro de validação");
+		error.setTimestamp(System.currentTimeMillis());
+		error.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+		error.setError("Erro de validação");
+		error.setMessage(e.getMessage());
 		error.setPath(request.getRequestURI());
 		
 		for(FieldError x:  e.getBindingResult().getFieldErrors()) {
 			error.addError(x.getField(), x.getDefaultMessage());
 		}
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);		
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);		
 	}
 	
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request){
 		
 		StandardError error = new StandardError();
-		error.setTimeStamp(Instant.now());
+		error.setTimestamp(System.currentTimeMillis());
 		error.setStatus(HttpStatus.FORBIDDEN.value());
-		error.setMensagem(e.getMessage());
+		error.setError("Acesso negado");
+		error.setMessage(e.getMessage());
 		error.setPath(request.getRequestURI());
 		
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);		
