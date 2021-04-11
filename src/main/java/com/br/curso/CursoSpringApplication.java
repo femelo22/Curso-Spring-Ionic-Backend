@@ -11,7 +11,7 @@ import com.br.curso.services.S3Service;
 public class CursoSpringApplication implements CommandLineRunner {
 
 	@Autowired
-	//private S3Service s3;
+	private S3Service s3;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursoSpringApplication.class, args);
@@ -19,6 +19,9 @@ public class CursoSpringApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		s3.uploadFile("C://img/cat1.jpg");
+		
 		System.out.println("R O D A N T E   ✔✔✔✔");
 	}
 
