@@ -1,5 +1,6 @@
 package com.br.curso.services;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.br.curso.domain.Cidade;
 import com.br.curso.domain.Cliente;
@@ -19,7 +21,6 @@ import com.br.curso.domain.enums.Perfil;
 import com.br.curso.domain.enums.TipoCliente;
 import com.br.curso.dto.ClienteDTO;
 import com.br.curso.dto.ClienteNewDTO;
-import com.br.curso.repositories.CidadeRepository;
 import com.br.curso.repositories.ClienteRepository;
 import com.br.curso.repositories.EnderecoRepository;
 import com.br.curso.security.UserSS;
@@ -38,6 +39,9 @@ public class ClienteService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private S3Service s3Service;
 
 	public Cliente findById(Integer id) {
 
@@ -122,5 +126,10 @@ public class ClienteService {
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
+	}
+	
+	
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 }
