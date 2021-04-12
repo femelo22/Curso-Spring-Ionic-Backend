@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.br.curso.domain.Categoria;
@@ -38,74 +39,93 @@ public class ClienteResource {
 
 	@Autowired
 	private ClienteService clienteService;
-	
+
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Cliente> find(@PathVariable Integer id){
-		
+	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
+
 		UserSS user = UserService.authenticated();
-		
-		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado.");
 		}
-		
+
 		Cliente cliente = clienteService.findById(id);
-		
-		return ResponseEntity.ok().body(cliente);		
+
+		return ResponseEntity.ok().body(cliente);
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
-		Cliente cliente = clienteService.fromDTO(objDto);//criando objeto Categoria a partir de uma CategoriaDto
-		
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
+		Cliente cliente = clienteService.fromDTO(objDto);// criando objeto Categoria a partir de uma CategoriaDto
+
 		cliente = clienteService.insert(cliente);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				 .path("/{id}").buildAndExpand(cliente.getId()).toUri();
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
+				.toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id) {
 		Cliente obj = clienteService.fromDTO(objDto);
 		obj.setId(id);
 		obj = clienteService.update(obj);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Integer id){
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		clienteService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping
-	public ResponseEntity<List<ClienteDTO>> findAll(){
+	public ResponseEntity<List<ClienteDTO>> findAll() {
 		List<Cliente> list = clienteService.findAll();
-		List<ClienteDTO> listDto = list.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList()); // trasforma uma lista em outra( no caso uma lista de categorias em categorias dto)
+		List<ClienteDTO> listDto = list.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList()); // trasforma
+																												// uma
+																												// lista
+																												// em
+																												// outra(
+																												// no
+																												// caso
+																												// uma
+																												// lista
+																												// de
+																												// categorias
+																												// em
+																												// categorias
+																												// dto)
 		return ResponseEntity.ok().body(listDto);
 	}
-	
+
 	@GetMapping(value = "/email")
-	public ResponseEntity<Cliente> findByEmail(@RequestParam(value = "value") String email){
+	public ResponseEntity<Cliente> findByEmail(@RequestParam(value = "value") String email) {
 		Cliente obj = clienteService.findByEmail(email);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping(value = "/page")
 	public ResponseEntity<Page<ClienteDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage, 
-			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy, 
-			@RequestParam(value = "direction", defaultValue = "ASC") String direction){
-		
-		Page<Cliente> list = clienteService.findPage(page, linesPerPage,direction, orderBy);
-		
-		Page<ClienteDTO> listDto = list.map(obj -> new ClienteDTO(obj)); //Page já é java 11 complience
-		
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+
+		Page<Cliente> list = clienteService.findPage(page, linesPerPage, direction, orderBy);
+
+		Page<ClienteDTO> listDto = list.map(obj -> new ClienteDTO(obj)); // Page já é java 11 complience
+
 		return ResponseEntity.ok().body(listDto);
 	}
-	
-	
+
+	@PostMapping(value = "/picture")
+	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
+		
+		URI uri = clienteService.uploadProfilePicture(file);
+		return ResponseEntity.created(uri).build();
+	}
+
 }
