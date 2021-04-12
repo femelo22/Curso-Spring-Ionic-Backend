@@ -1,11 +1,13 @@
 package com.br.curso.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +43,13 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 	
 	@Autowired
+	private ImageService imgService;
+	
+	@Autowired
 	private S3Service s3Service;
+	
+	@Value("${img.prefix.client.profile}")
+	private String clientImgPrefix;
 
 	public Cliente findById(Integer id) {
 
@@ -138,14 +146,10 @@ public class ClienteService {
 			throw new AuthorizationException("Acesso negado");
 		}
 		
-		URI uri = s3Service.uploadFile(multipartFile);
+		BufferedImage jpImage = imgService.getJpgImageFromFile(multipartFile);
 		
-		Cliente cli = clienteRepository.findById(user.getId()).orElseThrow();
+		String fileName = clientImgPrefix + user.getId() + ".jpg";
 		
-		cli.setImageUrl(uri.toString());
-		
-		clienteRepository.save(cli);
-		
-		return uri;
+		return s3Service.uploadFile(imgService.getInputStram(jpImage, "jpg"), fileName, "image");		
 	}
 }
