@@ -54,6 +54,12 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(cliente);
 	}
 
+	@GetMapping(value = "/email")
+	public ResponseEntity<Cliente> findByEmail(@RequestParam(value = "value") String email) {
+		Cliente obj = clienteService.findByEmail(email);
+		return ResponseEntity.ok().body(obj);
+	}
+
 	@PostMapping
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
 		Cliente cliente = clienteService.fromDTO(objDto);// criando objeto Categoria a partir de uma CategoriaDto
@@ -85,26 +91,11 @@ public class ClienteResource {
 	public ResponseEntity<List<ClienteDTO>> findAll() {
 		List<Cliente> list = clienteService.findAll();
 		List<ClienteDTO> listDto = list.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList()); // trasforma
-																												// uma
-																												// lista
-																												// em
+																												// //
 																												// outra(
-																												// no
-																												// caso
-																												// uma
-																												// lista
-																												// de
-																												// categorias
-																												// em
-																												// categorias
+																												// //
 																												// dto)
 		return ResponseEntity.ok().body(listDto);
-	}
-
-	@GetMapping(value = "/email")
-	public ResponseEntity<Cliente> findByEmail(@RequestParam(value = "value") String email) {
-		Cliente obj = clienteService.findByEmail(email);
-		return ResponseEntity.ok().body(obj);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -123,7 +114,7 @@ public class ClienteResource {
 
 	@PostMapping(value = "/picture")
 	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
-		
+
 		URI uri = clienteService.uploadProfilePicture(file);
 		return ResponseEntity.created(uri).build();
 	}
